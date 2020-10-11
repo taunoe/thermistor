@@ -4,6 +4,9 @@
  * 11.10.2020 
  * https://taunoerik.art/
  * https://github.com/taunoe/thermistor
+ * 
+ * TODO:
+ *  - replase delays with millis()
  ********************************************************************/
 
 /******************************************************************** 
@@ -136,15 +139,30 @@ namespace display {
    */
   void animation_triibud(){
     uint8_t pattern[2] = { 0b00000001, 0b00000010};
-
+    int interval = 40;
     //DEBUG_PRINT(pattern[0]);DEBUG_PRINT(", ");DEBUG_PRINTLN(pattern[1]);
     for (uint8_t i = 0; i < 4; i++)
     {
       shift_to_7seg(pattern);
       pattern[0] = pattern[0] << 2;
       pattern[1] = pattern[1] << 2;
-      delay(50);
+      delay(interval);
     }
+      pattern[0] = {0b00010000};
+      pattern[1] = {0b00100000};
+      shift_to_7seg(pattern);
+      delay(interval);
+
+      pattern[0] = {0b00000100};
+      pattern[1] = {0b00001000};
+      shift_to_7seg(pattern);
+      delay(interval);
+
+      pattern[0] = {0b00000001};
+      pattern[1] = {0b00000010};
+      shift_to_7seg(pattern);
+      delay(interval);
+    
   }
 
   /* To store number what is on display */

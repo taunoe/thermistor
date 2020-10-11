@@ -1,1 +1,3 @@
 # thermistor
+
+© Tauno Erik
