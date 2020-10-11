@@ -1,8 +1,9 @@
 #include <Arduino.h>
 /********************************************************************
  * Tauno Erik
- * 10.10.2020 
+ * 11.10.2020 
  * https://taunoerik.art/
+ * https://github.com/taunoe/thermistor
  ********************************************************************/
 
 /******************************************************************** 
@@ -22,6 +23,7 @@
  *  0 - High! (Common anode!)
  *  1 - Low
  ********************************************************************/
+
 // Enable debug info Serial print
 #define DEBUG
 #ifdef DEBUG
@@ -32,19 +34,25 @@
   #define DEBUG_PRINTLN(x)
 #endif
 
-
+/* Pins */
 const int LATCH_PIN = 8;
 const int DATA_PIN = 11;
 const int CLOCK_PIN = 12;
 const int THERMISTOR_PIN = A0;
 
+const int INTERVAL = 500; // delay
+
 /********************************************************************/
+
 // https://protosupplies.com/product/thermistor-temp-sensor-module/
-    // https://www.thinksrs.com/downloads/programs/therm%20calc/ntccalibrator/ntccalculator.html
+// https://www.thinksrs.com/downloads/programs/therm%20calc/ntccalibrator/ntccalculator.html
 
 namespace sensor{
 
-  /* Beta model equation */
+  /* 
+   * Function to read and calculate tempearure.
+   * Algoritm: Beta model equation
+   */
   float read_beta(int pin = THERMISTOR_PIN) {
     
     const double RESISTOR   = 9820.0;  // Measured value of on-board divider resistor
@@ -61,7 +69,10 @@ namespace sensor{
     return celsius;
   }
 
-  /* Steinhart-hart equation */
+  /*
+   * Function to read and calculate tempearure.
+   * Algoritm: Steinhart-hart equation 
+   */
   float read(int pin = THERMISTOR_PIN) {
     // Steinhart-hart coeficients:
     const float c1 = 0.001129148;       // 0.001129148
@@ -81,9 +92,12 @@ namespace sensor{
 
 } // sensor namespace end
 
+
+
 /********************************************************************/
 namespace display {
 
+  /* Defined numbers */
   uint8_t numbers[10][2] = {
     {0b00000111, 0b00001110}, // 0
     {0b00000001, 0b00000010}, // 1
@@ -97,12 +111,17 @@ namespace display {
     {0b00001111, 0b00000110}  // 9
   };
 
-  uint8_t error[2] = {0b10101010, 0b01000100};
+  // Error message
+  uint8_t error[2] = {0b10101010, 0b01000100 };
 
+  /*
+   * Function to shift number out.
+   * Input is array.
+   * Example array: int zero[2] = { 0b00000111, 0b00001110};
+   * Usage: shift_to_7seg(zero);
+   */
   void shift_to_7seg(uint8_t *num) {
-    // Input is array. 
-    // Example array: int zero[2] = { 0b00000111, 0b00001110};
-    // Usage: shift_to_7seg(zero);
+ 
     digitalWrite(LATCH_PIN, LOW);
     for (size_t i = 0; i < 2; i++) {
       // MSBFIRST - Most Significant Bit First
@@ -112,14 +131,38 @@ namespace display {
     digitalWrite(LATCH_PIN, HIGH);
   }
 
+  /*
+   * Function to display animation: triibud 
+   */
+  void animation_triibud(){
+    uint8_t pattern[2] = { 0b00000001, 0b00000010};
+
+    //DEBUG_PRINT(pattern[0]);DEBUG_PRINT(", ");DEBUG_PRINTLN(pattern[1]);
+    for (uint8_t i = 0; i < 4; i++)
+    {
+      shift_to_7seg(pattern);
+      pattern[0] = pattern[0] << 2;
+      pattern[1] = pattern[1] << 2;
+      delay(50);
+    }
+  }
+
+  /* To store number what is on display */
   uint8_t old_num = 0;
 
-  void write(uint8_t num) {
-    // Function input number 0 - 99
-    uint8_t new_number[2] = {0}; // Decimal number in binary form
+  /*
+   * Fuction to display number.
+   * Input number 0 - 99
+   * Shifts out number only when it is changed
+   */
+  void write_number(uint8_t num) {
+
+    // When we convert decimal number (10-99) to binary we store it here
+    uint8_t new_number[2] = {0}; 
 
     // We shift it out only when a number has changed.
     if (num != old_num) {
+      animation_triibud();
       // If number is 0-9:
       if (num < 10) {
         shift_to_7seg(numbers[num]);
@@ -149,15 +192,17 @@ namespace display {
 
 } // display namespace end
 
+
+
 /********************************************************************/
 
-int d = 100; // delay
 
 void setup() {
   Serial.begin(9600);
   pinMode(LATCH_PIN, OUTPUT);
   pinMode(DATA_PIN, OUTPUT);
   pinMode(CLOCK_PIN, OUTPUT);
+  // TODO: animation
 }
 
 void loop() {
@@ -177,7 +222,8 @@ void loop() {
   DEBUG_PRINT(average);
   DEBUG_PRINTLN(" C");  
 
-  display::write((int)average); // Convert float to int
-  delay(500);
+  display::write_number((int)average); // Convert float to int. so our func. can use it
 
+  delay(INTERVAL);
+  
 }
