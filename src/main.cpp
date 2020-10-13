@@ -134,36 +134,88 @@ namespace display {
     digitalWrite(LATCH_PIN, HIGH);
   }
 
+
   /*
-   * Function to display animation: triibud 
+   * Helper function for animations
    */
-  void animation_triibud(){
+  void shift_frame( uint8_t a, uint8_t b){
+    uint8_t pattern[2] = { a, b};
+    shift_to_7seg(pattern);
+  }
+
+  /*
+   * Function to display animation: triibud.
+   * Param int speed == delay time. Higher == slower 
+   */
+  void animation_triibud(int speed = 40){
     uint8_t pattern[2] = { 0b00000001, 0b00000010};
-    int interval = 40;
     //DEBUG_PRINT(pattern[0]);DEBUG_PRINT(", ");DEBUG_PRINTLN(pattern[1]);
     for (uint8_t i = 0; i < 4; i++)
     {
       shift_to_7seg(pattern);
       pattern[0] = pattern[0] << 2;
       pattern[1] = pattern[1] << 2;
-      delay(interval);
+      delay(speed);
     }
-      pattern[0] = {0b00010000};
-      pattern[1] = {0b00100000};
-      shift_to_7seg(pattern);
-      delay(interval);
+      shift_frame(0b00010000, 0b00100000);
+      delay(speed);
+ 
+      shift_frame(0b00000100, 0b00001000);
+      delay(speed);
 
-      pattern[0] = {0b00000100};
-      pattern[1] = {0b00001000};
-      shift_to_7seg(pattern);
-      delay(interval);
-
-      pattern[0] = {0b00000001};
-      pattern[1] = {0b00000010};
-      shift_to_7seg(pattern);
-      delay(interval);
-    
+      shift_frame(0b00000001, 0b00000010);
+      delay(speed);
   }
+
+  /*
+   * Function to display animation:  
+   */
+  void animation_snake(int speed = 30){
+    shift_frame(0b00000000, 0b00000001);
+    delay(speed);
+    shift_frame(0b00000000, 0b00000100);
+    delay(speed);
+    shift_frame(0b00000000, 0b00001000);
+    delay(speed);
+    shift_frame(0b00001000, 0b00000000);
+    delay(speed);
+    shift_frame(0b00000001, 0b00000000);
+    delay(speed);
+    shift_frame(0b00000010, 0b00000000);
+    delay(speed);
+    shift_frame(0b00000100, 0b00000000);
+    delay(speed);
+    shift_frame(0b00001000, 0b00000000);
+    delay(speed);
+    shift_frame(0b00000000, 0b00000010);
+    delay(speed);
+    shift_frame(0b00000000, 0b00000100);
+    delay(speed);
+    shift_frame(0b00000000, 0b00010000);
+    delay(speed);
+    shift_frame(0b00000000, 0b00100000);
+    delay(speed);
+    shift_frame(0b10000000, 0b00000000);
+    delay(speed);
+    shift_frame(0b01000000, 0b00000000);
+    delay(speed);
+    shift_frame(0b00100000, 0b00000000);
+    delay(speed);
+    shift_frame(0b10000000, 0b00000000);
+    delay(speed);
+    shift_frame(0b00000000, 0b10000000);
+    delay(speed);
+    shift_frame(0b00000000, 0b01000000);
+    delay(speed);
+    shift_frame(0b00000000, 0b00010000);
+    delay(speed);
+    shift_frame(0b00000000, 0b00000100);
+    delay(speed);
+    shift_frame(0b00000000, 0b00000001);
+    delay(speed);
+  }
+
+
 
   /* To store number what is on display */
   uint8_t old_num = 0;
@@ -180,7 +232,8 @@ namespace display {
 
     // We shift it out only when a number has changed.
     if (num != old_num) {
-      animation_triibud();
+      //animation_triibud();
+      animation_snake();
       // If number is 0-9:
       if (num < 10) {
         shift_to_7seg(numbers[num]);
@@ -207,6 +260,7 @@ namespace display {
     }
     old_num = num;
   }
+
 
 } // display namespace end
 

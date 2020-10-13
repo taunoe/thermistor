@@ -6,11 +6,19 @@ A device that measures the ambient temperature in the environment in which it is
 
 ## Artistic description
 
+The first goal was to test an easier way to connect 7-segs and shift registers.
+Technical flower.
+Animations.
+
 ## Technical description
 
 Main CPU, Arduino pro mini, uses thermistor to calculate temperature. Uses two different algorithms for this: Steinhart-hart equation and Beta model equation.
 
-The display consists of two seven-segment displays. Drived by two 74HC595 shift registers. Which is connected to the seven-segment displays in a non-traditional way. This makes the construction easier.
+The display consists of two seven-segment displays. Drived by two 74HC595 shift registers. Which is connected to the seven-segment displays in a non-traditional way.This makes the construction easier.
+
+IDE: [PlatformIO](https://platformio.org/)
+
+The [code](src/main.cpp) is in the src directory.
 
 ![Lämmämõõdusk schematics](img/schematics.png)
 
