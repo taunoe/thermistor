@@ -2,7 +2,7 @@
 
 """
   Tauno Erik
-  15.10.2020
+  17.10.2020
   Read and log data to csv file
 
   Usage: python3 ./read.py /dev/ttyACM0 9600
@@ -15,18 +15,19 @@
   https://www.devdungeon.com/content/python-catch-sigint-ctrl-c
   https://pythonhosted.org/pyserial/shortintro.html
 """
-
+import argparse
+import os
+import re
 import serial # pip3 install pyserial
 import serial.tools.list_ports
-import os
 import sys
-import argparse
-import re
+
+
 
 
 def find_numbers(str):
   """
-  Function to extract all the numbers from the given string
+  Extract all the numbers from the given string
   https://www.regular-expressions.info/floatingpoint.html
   """
   numbers = re.findall(r'[-+]?[0-9]*\.?[0-9]+', str) 
@@ -49,12 +50,12 @@ def main(argv):
   print("Port = {}".format(args.port))
   print("Baudrate = {}".format(args.baudrate))
 
-  if args.log:
-    # absolute path
-    path = os.getcwd() + '/'
-    file = 'log.csv' # TODO: add time
+  filename = "log.csv"
+  flag_file_open = False
 
-    print("Log data: {}{}".format(path, file))
+  if args.log:
+    path = os.getcwd() + '/' # absolute path
+    print("Log data: {}{}".format(path, filename))
   
   # Open serial
   ser = serial.Serial(args.port, args.baudrate)
@@ -64,11 +65,18 @@ def main(argv):
       incoming_data = ser.readline()[:-2].decode('ascii') # [:-2] gets rid of the new-line chars
       print("{}".format(incoming_data))
       numbers = find_numbers(incoming_data)
-      print(numbers)
+      #print(numbers)
+      if args.log:
+        file = open(filename, "a") # append
+        flag_file_open = True
+        file.write(str(numbers[2] + ",")) # Write average 
+        file.close()
     except KeyboardInterrupt:
       # Exit when CTRL-C pressed
       print('CTRL-C detected.')
       ser.close()
+      if flag_file_open:
+        file.close()
       exit(0)
       
 
