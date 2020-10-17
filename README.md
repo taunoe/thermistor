@@ -6,11 +6,13 @@ A device that measures the ambient temperature in the environment in which it is
 
 ## Artistic description
 
-The first goal was to test an easier way to connect 7-segs and shift registers.
-Technical flower.
-Animations.
+Plant-like structures. Display like blossom. Bottom woodblock aged with brushing with a wire brush and oxidation solution (steel wool + vingar).
+
+### Animations
 
 ## Technical description
+
+The first goal was to test an easier way to connect 7-segs and shift registers.
 
 Main CPU, Arduino pro mini, uses thermistor to calculate temperature. Uses two different algorithms for this: Steinhart-hart equation and Beta model equation.
 
@@ -34,5 +36,18 @@ The [code](src/main.cpp) is in the src directory.
 | 6   | Thermistor 10k              | 1    |
 | 7   | Resistor 10K                | 1    |
 
+
+## Readin data
+
+The simplest way to read serial data is to use Miniterm
+![Data on Miniterm](img/miniterm.gif)
+
+Data viewed on my [Serial Plotter](https://github.com/taunoe/tauno-serial-plotter).
+![Serial plotter](img/plot.png)
+
+Also, I have made two Python scripts. [read.py](py/read.py) and simple GUI app [gui.py](py/gui.py). What display average temperature.
+![read.py](img/python-stio.gif)
+
+![gui.py](img/gui.gif)
 
  Tauno Erik | 2020 | [taunoerik.art](https://taunoerik.art/)  ©
