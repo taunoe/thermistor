@@ -1,5 +1,7 @@
 # Lämmämõõdusk
 
+![Lämmämõõdusk](img/IMG_8153.jpg)
+
 ## Description
 
 A device that measures the ambient temperature in the environment in which it is located. And displays it on the screen.
@@ -9,6 +11,8 @@ A device that measures the ambient temperature in the environment in which it is
 Plant-like structures. Display like blossom. Bottom woodblock aged with brushing with a wire brush and oxidation solution (steel wool + vingar).
 
 ### Animations
+When the number to display changes it plays short animation.
+![First animation](img/animation1.gif)
 
 ## Technical description
 
