@@ -5,25 +5,44 @@
 # pip3 install pycairo
 # pip3 install PyGObject
 
+# https://stackoverflow.com/questions/31162398/create-a-radio-action-in-a-gtk-popovermenu
+# https://stackoverflow.com/questions/31012645/properly-structure-and-highlight-a-gtkpopovermenu-using-pygobject
+
 # Load Gtk
 import gi
 gi.require_version('Gtk', '3.0')
-from gi.repository import Gtk
+from gi.repository import Gtk, Gio
 
-# When the application is launched…
-def on_activate(app):
-    # … create a new window…
-    win = Gtk.ApplicationWindow(application=app)
-    # … with a button in it…
-    btn = Gtk.Button(label='Hello, World!')
-    # … which closes the window when clicked
-    btn.connect('clicked', lambda x: win.close())
-    win.add(btn)
-    win.show_all()
 
-# Create a new application
-app = Gtk.Application(application_id='com.example.GtkApplication')
-app.connect('activate', on_activate)
+class MyWindow(Gtk.Window):
+    def __init__(self):
+        Gtk.Window.__init__(self, title="Lämmämõõdusk")
+        self.set_default_size(600, 400)
+        self.set_position(Gtk.WindowPosition.CENTER)
 
-# Run the application
-app.run(None)
+        # HeaderBar
+        hb = Gtk.HeaderBar()
+        hb.set_show_close_button(True)
+        hb.props.title = "Lämmämõõdusk"
+        self.set_titlebar(hb)
+
+        # Menu icon on HeaderBar
+        button_settings = Gtk.MenuButton()
+        icon = Gio.ThemedIcon(name="open-menu-symbolic")
+        image = Gtk.Image.new_from_gicon(icon, Gtk.IconSize.BUTTON)
+        button_settings.add(image)
+        hb.pack_end(button_settings)
+
+        # Button on window center
+        self.button = Gtk.Button(label="Click Here")
+        self.button.connect("clicked", self.on_button_clicked) # signal clicked calls Method
+        self.add(self.button)
+
+    # Method
+    def on_button_clicked(self, widget):
+        print("Hello World")
+
+win = MyWindow()
+win.connect("destroy", Gtk.main_quit)
+win.show_all()
+Gtk.main()
