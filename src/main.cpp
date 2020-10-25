@@ -174,50 +174,37 @@ namespace display {
    * Function to display animation:  
    */
   void animation_snake(int speed = 30) {
-    shift_frame(0b00000000, 0b00000001);
-    delay(speed);
-    shift_frame(0b00000000, 0b00000100);
-    delay(speed);
-    shift_frame(0b00000000, 0b00001000);
-    delay(speed);
-    shift_frame(0b00001000, 0b00000000);
-    delay(speed);
-    shift_frame(0b00000001, 0b00000000);
-    delay(speed);
-    shift_frame(0b00000010, 0b00000000);
-    delay(speed);
-    shift_frame(0b00000100, 0b00000000);
-    delay(speed);
-    shift_frame(0b00001000, 0b00000000);
-    delay(speed);
-    shift_frame(0b00000000, 0b00000010);
-    delay(speed);
-    shift_frame(0b00000000, 0b00000100);
-    delay(speed);
-    shift_frame(0b00000000, 0b00010000);
-    delay(speed);
-    shift_frame(0b00000000, 0b00100000);
-    delay(speed);
-    shift_frame(0b10000000, 0b00000000);
-    delay(speed);
-    shift_frame(0b01000000, 0b00000000);
-    delay(speed);
-    shift_frame(0b00100000, 0b00000000);
-    delay(speed);
-    shift_frame(0b10000000, 0b00000000);
-    delay(speed);
-    shift_frame(0b00000000, 0b10000000);
-    delay(speed);
-    shift_frame(0b00000000, 0b01000000);
-    delay(speed);
-    shift_frame(0b00000000, 0b00010000);
-    delay(speed);
-    shift_frame(0b00000000, 0b00000100);
-    delay(speed);
-    shift_frame(0b00000000, 0b00000001);
-    delay(speed);
-  }
+    uint8_t frames[] = {
+      0b00000000, 0b00000001,
+      0b00000000, 0b00000100,
+      0b00000000, 0b00001000,
+      0b00001000, 0b00000000,
+      0b00000001, 0b00000000,
+      0b00000010, 0b00000000,
+      0b00000100, 0b00000000,
+      0b00001000, 0b00000000,
+      0b00000000, 0b00000010,
+      0b00000000, 0b00000100,
+      0b00000000, 0b00010000,
+      0b00000000, 0b00100000,
+      0b10000000, 0b00000000,
+      0b01000000, 0b00000000,
+      0b00100000, 0b00000000,
+      0b10000000, 0b00000000,
+      0b00000000, 0b10000000,
+      0b00000000, 0b01000000,
+      0b00000000, 0b00010000,
+      0b00000000, 0b00000100,
+      0b00000000, 0b00000001
+    };
 
+    for (uint8_t i = 0; i < 42; i++) {
+      if (i % 2 == 0) {  // if even
+        shift_frame(frames[i], frames[i+1]);
+        delay(speed);
+      }
+    }
+  }
 
 
   /* To store number what is on display */
@@ -239,9 +226,8 @@ namespace display {
       // If number is 0-9:
       if (num < 10) {
         shift_to_7seg(numbers[num]);
-      }
-      // If number is 10-99:
-      else if (num > 9 and num < 100) {
+      } else if (num > 9 && num < 100) {
+        // If number is 10-99:
         // Spli the number.
         // e.g if we have 58
         // then 5 and 8
