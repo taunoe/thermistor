@@ -54,4 +54,6 @@ Also, I have made two Python scripts. [read.py](py/read.py) and simple GUI app [
 
 ![gui.py](img/gui.gif)
 
- Tauno Erik | 2020 | [taunoerik.art](https://taunoerik.art/)  ©
+___
+
+Copyright 2021 Tauno Erik https://taunoerik.art
