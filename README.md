@@ -53,4 +53,6 @@ Also, I have made two Python scripts. [read.py](py/read.py) and simple GUI app [
 
 ![gui.py](img/gui.gif)
 
- Tauno Erik | 2021 | [taunoerik.art](https://taunoerik.art/)
+___
+
+Tauno Erik | 2021 | [taunoerik.art](https://taunoerik.art/)
