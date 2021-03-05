@@ -40,7 +40,6 @@ The [code](src/main.cpp) is in the src directory.
 | 6   | Thermistor 10k              | 1    |
 | 7   | Resistor 10K                | 1    |
 
-
 ## Readin data
 
 The simplest way to read serial data is to use Miniterm
@@ -54,4 +53,4 @@ Also, I have made two Python scripts. [read.py](py/read.py) and simple GUI app [
 
 ![gui.py](img/gui.gif)
 
- Tauno Erik | 2020 | [taunoerik.art](https://taunoerik.art/)  ©
+ Tauno Erik | 2021 | [taunoerik.art](https://taunoerik.art/)

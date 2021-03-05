@@ -1,9 +1,13 @@
-#include <Arduino.h>
 /********************************************************************
  * Copyright 2020 Tauno Erik
- * 11.10.2020 
- * https://taunoerik.art/
- * https://github.com/taunoe/thermistor
+ * Modified: 05.03.2021 
+ * 
+ * Links:
+ *  https://taunoerik.art/
+ *  https://github.com/taunoe/thermistor
+ * 
+ *  https://protosupplies.com/product/thermistor-temp-sensor-module/
+ *  https://www.thinksrs.com/downloads/programs/therm%20calc/ntccalibrator/ntccalculator.html
  * 
  * TODO:
  *  - replase delays with millis()
@@ -27,6 +31,8 @@
  *  1 - Low
  ********************************************************************/
 
+#include <Arduino.h>
+
 // Enable debug info Serial print
 #define DEBUG
 #ifdef DEBUG
@@ -45,13 +51,8 @@ const int THERMISTOR_PIN = A0;
 
 const int INTERVAL = 500;  // delay
 
-/********************************************************************/
-
-// https://protosupplies.com/product/thermistor-temp-sensor-module/
-// https://www.thinksrs.com/downloads/programs/therm%20calc/ntccalibrator/ntccalculator.html
 
 namespace sensor {
-
   /* 
    * Function to read and calculate tempearure.
    * Algoritm: Beta model equation
@@ -79,7 +80,7 @@ namespace sensor {
    * Function to read and calculate tempearure.
    * Algoritm: Steinhart-hart equation 
    */
-  float read(int pin = THERMISTOR_PIN) {
+  float read_steinhart(int pin = THERMISTOR_PIN) {
     // Steinhart-hart coeficients:
     const float c1 = 0.001129148;       // 0.001129148
     const float c2 = 0.000234125;       // 0.000234125
@@ -101,10 +102,7 @@ namespace sensor {
 }  // namespace sensor
 
 
-
-/********************************************************************/
 namespace display {
-
   /* Defined numbers */
   uint8_t numbers[10][2] = {
     {0b00000111, 0b00001110},  // 0
@@ -255,30 +253,29 @@ namespace display {
 
 
 void setup() {
-  Serial.begin(9600);
+  Serial.begin(115200);
+
   pinMode(LATCH_PIN, OUTPUT);
   pinMode(DATA_PIN, OUTPUT);
   pinMode(CLOCK_PIN, OUTPUT);
-  // TODO(Tauno): animation
 }
 
 void loop() {
-  float temp = sensor::read();
+  float temp_steinhart = sensor::read_steinhart();
   float temp_beta = sensor::read_beta();
 
   DEBUG_PRINT("Steinhart: ");
-  DEBUG_PRINT(temp);
+  DEBUG_PRINT(temp_steinhart);
 
   DEBUG_PRINT(" Beta method: ");
   DEBUG_PRINT(temp_beta);
 
-  float average = (temp+temp_beta)/2;
+  float average = (temp_steinhart+temp_beta)/2;
 
   DEBUG_PRINT(" Average: ");
   DEBUG_PRINT(average);
   DEBUG_PRINTLN(" C");
 
-  // display::write_number((int)average);
   // Convert float to int. so our func. can use it
   display::write_number(static_cast<int>(average));
 
